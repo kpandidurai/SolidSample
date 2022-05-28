@@ -27,6 +27,7 @@ namespace ArdalisRating
             var rater = factory.Create(policy, this);
             rater.Rate(policy);
 
+
             Logger.Log("Rating completed.");
         }
     }
