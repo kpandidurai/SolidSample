@@ -12,12 +12,10 @@ namespace ArdalisRating
     public class RatingEngine
     {
         public decimal Rating { get; set; }
-<<<<<<< Updated upstream
-=======
-
         public ConsoleLogger Logger { get; set; }
         public ReadFilePolicySource ReadFilePolicySource;
         public PolicySerializer PolicySerializer;
+
 
         public RatingEngine()
         {
@@ -26,31 +24,25 @@ namespace ArdalisRating
             PolicySerializer = new PolicySerializer();
         }
 
->>>>>>> Stashed changes
+
         public void Rate()
         {
-            Console.WriteLine("Starting rate.");
-
-            Console.WriteLine("Loading policy.");
-
-            // load policy - open file policy.json
-<<<<<<< Updated upstream
-            string policyJson = File.ReadAllText("policy.json");
-=======
-            //1 read responsibility
+            Logger.Log("Starting rate.");
+            Logger.Log("Loading policy.");
+          
             string policyString = ReadFilePolicySource.ReadPolicy();
->>>>>>> Stashed changes
-
+          
             var policy = PolicySerializer.GetPolicy(policyString);
 
+            //business logic responsibility 
             switch (policy.Type)
             {
                 case PolicyType.Auto:
-                    Console.WriteLine("Rating AUTO policy...");
-                    Console.WriteLine("Validating policy.");
+                    Logger.Log("Rating AUTO policy...");
+                    Logger.Log("Validating policy.");
                     if (String.IsNullOrEmpty(policy.Make))
                     {
-                        Console.WriteLine("Auto policy must specify Make");
+                        Logger.Log("Auto policy must specify Make");
                         return;
                     }
                     if (policy.Make == "BMW")
@@ -64,37 +56,37 @@ namespace ArdalisRating
                     break;
 
                 case PolicyType.Land:
-                    Console.WriteLine("Rating LAND policy...");
-                    Console.WriteLine("Validating policy.");
+                    Logger.Log("Rating LAND policy...");
+                    Logger.Log("Validating policy.");
                     if (policy.BondAmount == 0 || policy.Valuation == 0)
                     {
-                        Console.WriteLine("Land policy must specify Bond Amount and Valuation.");
+                        Logger.Log("Land policy must specify Bond Amount and Valuation.");
                         return;
                     }
                     if (policy.BondAmount < 0.8m * policy.Valuation)
                     {
-                        Console.WriteLine("Insufficient bond amount.");
+                        Logger.Log("Insufficient bond amount.");
                         return;
                     }
                     Rating = policy.BondAmount * 0.05m;
                     break;
 
                 case PolicyType.Life:
-                    Console.WriteLine("Rating LIFE policy...");
-                    Console.WriteLine("Validating policy.");
+                    Logger.Log("Rating LIFE policy...");
+                    Logger.Log("Validating policy.");
                     if (policy.DateOfBirth == DateTime.MinValue)
                     {
-                        Console.WriteLine("Life policy must include Date of Birth.");
+                        Logger.Log("Life policy must include Date of Birth.");
                         return;
                     }
                     if (policy.DateOfBirth < DateTime.Today.AddYears(-100))
                     {
-                        Console.WriteLine("Centenarians are not eligible for coverage.");
+                        Logger.Log("Centenarians are not eligible for coverage.");
                         return;
                     }
                     if (policy.Amount == 0)
                     {
-                        Console.WriteLine("Life policy must include an Amount.");
+                        Logger.Log("Life policy must include an Amount.");
                         return;
                     }
                     int age = DateTime.Today.Year - policy.DateOfBirth.Year;
@@ -114,11 +106,11 @@ namespace ArdalisRating
                     break;
 
                 default:
-                    Console.WriteLine("Unknown policy type");
+                    Logger.Log("Unknown policy type");
                     break;
             }
 
-            Console.WriteLine("Rating completed.");
+            Logger.Log("Rating completed.");
         }
     }
 }

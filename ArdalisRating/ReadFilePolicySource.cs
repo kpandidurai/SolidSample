@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 namespace ArdalisRating
 {
@@ -7,10 +7,10 @@ namespace ArdalisRating
         public ReadFilePolicySource()
         {
         }
-
         public string ReadPolicy()
         {
             return File.ReadAllText("policy.json");
         }
+
     }
 }
