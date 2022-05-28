@@ -12,27 +12,27 @@ namespace ArdalisRating
     public class RatingEngine
     {
         public decimal Rating { get; set; }
-
         public ConsoleLogger Logger { get; set; }
+        public ReadFilePolicySource ReadFilePolicySource;
+        public PolicySerializer PolicySerializer;
+
 
         public RatingEngine()
         {
             Logger = new ConsoleLogger();
+            ReadFilePolicySource = new ReadFilePolicySource();
+            PolicySerializer = new PolicySerializer();
         }
+
 
         public void Rate()
         {
-
             Logger.Log("Starting rate.");
-
             Logger.Log("Loading policy.");
-
-            // load policy - open file policy.json
-            //1 read responsibility
-            string policyJson = File.ReadAllText("policy.json");
-
-            var policy = JsonConvert.DeserializeObject<Policy>(policyJson,
-                new StringEnumConverter());
+          
+            string policyString = ReadFilePolicySource.ReadPolicy();
+          
+            var policy = PolicySerializer.GetPolicy(policyString);
 
             //business logic responsibility 
             switch (policy.Type)
